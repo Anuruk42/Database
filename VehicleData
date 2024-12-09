@@ -1,0 +1,103 @@
+DROP DATABASE IF EXISTS Vehicles_Data;
+CREATE DATABASE Vehicles_Data;
+USE Vehicles_Data;
+
+CREATE TABLE Vehicles (
+    vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_type VARCHAR(255) NOT NULL, #ชนิดยานพาหนะ
+    make VARCHAR(255) NOT NULL, #ผู้ผลิต
+    model VARCHAR(255) NOT NULL, #รุ่นยานพาหนะ
+    year INT NOT NULL, #ปีที่ผลิต
+    registration_number VARCHAR(255) NOT NULL, #ทะเบียนรถ
+    owner_name VARCHAR(255) NOT NULL, #ชื่อเจ้าของ
+    owner_contact VARCHAR(255) NOT NULL, #ข้อมูลการติดต่อเจ้าของ
+    purchase_date DATE NOT NULL, #วันที่ซื้อ
+    status VARCHAR(50) NOT NULL #สถานะยานพาหนะ
+);
+
+
+CREATE TABLE CarParts (
+    part_id INT AUTO_INCREMENT PRIMARY KEY, 
+    vehicle_id INT, #รหัสยานพาหนะ
+    part_name VARCHAR(255) NOT NULL, #ชื่อชิ้นส่วน
+    part_number VARCHAR(255) NOT NULL, #รหัสชิ้นส่วน
+    part_type VARCHAR(255) NOT NULL, #ชนิดชิ้นส่วน
+    manufacturer VARCHAR(255) NOT NULL, #ชื่อผู้ผลิต
+    purchase_date DATE NOT NULL, #วันที่ซื้อ
+    warranty_period INT NOT NULL, #ระยะเวลาประกัน
+    installation_date DATE NOT NULL, #วันที่ติดตั้ง
+    installation_cost DECIMAL(10, 2) NOT NULL, #ค่าใช้จ่ายในการติดตั้ง
+    usage_data TEXT, #ข้อมูลการใช้งาน
+    status VARCHAR(50) NOT NULL, #สถานะชิ้นส่วน
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicles(vehicle_id) 
+);
+
+
+CREATE TABLE ServiceHistory (
+    service_id INT AUTO_INCREMENT PRIMARY KEY, 
+    vehicle_id INT, #รหัสยานพาหนะ
+    service_date DATE NOT NULL, #วันที่ซ้อม
+    service_type VARCHAR(255) NOT NULL, #ประเภทการซ่อม
+    service_cost DECIMAL(10, 2) NOT NULL, #ค่าใช้จ่าย
+    service_description TEXT, #รายละเอียด
+    mechanic VARCHAR(255) NOT NULL, #ชื่อช่างซ่อม
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicles(vehicle_id) #
+);
+
+CREATE TABLE MaintenanceSchedule (
+    schedule_id INT AUTO_INCREMENT PRIMARY KEY, 
+    vehicle_id INT, #รหัสยานพาหนะ
+    maintenance_type VARCHAR(255) NOT NULL, #ประเภทการบำรุงรักษา
+    next_due_date DATE NOT NULL, #วันที่บำรุงรักษาต่อไป
+    status VARCHAR(50) NOT NULL, #สถานะ
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicles(vehicle_id) #
+);
+
+
+
+INSERT INTO Vehicles (vehicle_type, make, model, year, registration_number, owner_name, owner_contact, purchase_date, status)
+VALUES ('Car', 'Toyota', 'Camry', 2020, 'ศศ 5427', 'John', '0812345678', '2020-01-01', 'Active'),
+('Car', 'Honda', 'Civic', 2019, 'ศศ 5428', 'Alice', '0812345679', '2019-05-12', 'Active'),
+('Car', 'Ford', 'Focus', 2018, 'ศศ 5429', 'Bob', '0812345680', '2018-07-22', 'Active'),
+('Car', 'Nissan', 'Altima', 2017, 'ศศ 5430', 'Carol', '0812345681', '2017-03-05', 'Active'),
+('Car', 'Chevrolet', 'Malibu', 2016, 'ศศ 5431', 'Dave', '0812345682', '2016-09-15', 'Active'),
+('Car', 'Hyundai', 'Elantra', 2021, 'ศศ 5432', 'Eve', '0812345683', '2021-02-27', 'Active'),
+('Car', 'Mazda', '3', 2020, 'ศศ 5433', 'Frank', '0812345684', '2020-08-05', 'Active'),
+('Car', 'Volkswagen', 'Jetta', 2019, 'ศศ 5434', 'Grace', '0812345685', '2019-11-12', 'Active'),
+('Car', 'Subaru', 'Impreza', 2020, 'ศศ 5435', 'Henry', '0812345686', '2020-04-08', 'Active'),
+('Car', 'Kia', 'Soul', 2018, 'ศศ 5436', 'Ivy', '0812345687', '2018-12-20', 'Active');
+INSERT INTO CarParts (vehicle_id, part_name, part_number, part_type, manufacturer, purchase_date, warranty_period, installation_date, installation_cost, usage_data, status)
+VALUES (1, 'Brake Pads', 'BP1234', 'Brake', 'Brembo', '2020-07-01', 12, '2020-07-05', 10000, '5000 km', 'Active'),
+(2, 'Oil Filter', 'OF5678', 'Engine', 'Mann', '2019-06-01', 24, '2019-06-05', 3000, '8000 km', 'Active'),
+(3, 'Tire', 'T9876', 'Wheel', 'Michelin', '2018-08-01', 36, '2018-08-05', 15000, '12000 km', 'Active'),
+(4, 'Battery', 'BT4321', 'Electrical', 'Exide', '2017-04-01', 24, '2017-04-05', 12000, '10000 km', 'Active'),
+(5, 'Spark Plug', 'SP3214', 'Engine', 'NGK', '2016-10-01', 12, '2016-10-05', 2500, '15000 km', 'Active'),
+(6, 'Brake Fluid', 'BF8765', 'Fluid', 'Castrol', '2021-03-01', 12, '2021-03-05', 2000, '5000 km', 'Active'),
+(7, 'Air Filter', 'AF5679', 'Engine', 'K&N', '2020-09-01', 12, '2020-09-05', 3500, '6000 km', 'Active'),
+(8, 'Headlights', 'HL4321', 'Lighting', 'Philips', '2019-11-01', 24, '2019-11-05', 6000, '4000 km', 'Active'),
+(9, 'Transmission Fluid', 'TF0987', 'Fluid', 'Royal Purple', '2020-05-01', 12, '2020-05-05', 4000, '7000 km', 'Active'),
+(10, 'Radiator', 'RD3214', 'Cooling', 'Mishimoto', '2018-01-01', 60, '2018-01-05', 18000, '20000 km', 'Active');
+
+INSERT INTO ServiceHistory (vehicle_id, service_date, service_type, service_cost, service_description, mechanic)
+VALUES (1, '2021-09-01', 'ซ่อมแอร์', 5000, 'ซ่อมแอร์และล้างฟิลเตอร์', 'Joe'),
+(2, '2020-08-15', 'เปลี่ยนยาง', 8000, 'เปลี่ยนยางใหม่ทั้งสี่เส้น', 'Jane'),
+(3, '2019-06-20', 'เปลี่ยนแบตเตอรี่', 1500, 'เปลี่ยนแบตเตอรี่ใหม่', 'Mike'),
+(4, '2018-05-10', 'เปลี่ยนน้ำมันเครื่อง', 1200, 'เปลี่ยนน้ำมันเครื่องใหม่', 'Sarah'),
+(5, '2017-03-25', 'ตรวจเช็คช่วงล่าง', 2000, 'ตรวจเช็คและเปลี่ยนชิ้นส่วนที่สึกหรอ', 'Tom'),
+(6, '2021-04-12', 'เปลี่ยนผ้าเบรค', 1500, 'เปลี่ยนผ้าเบรคใหม่ทั้งสี่ล้อ', 'Emily'),
+(7, '2020-02-18', 'ซ่อมเกียร์', 3000, 'ซ่อมเกียร์และเปลี่ยนยางกันฝุ่น', 'David'),
+(8, '2019-11-05', 'ล้างฟิลเตอร์อากาศ', 500, 'ล้างและเปลี่ยนฟิลเตอร์ใหม่', 'Nancy'),
+(9, '2018-08-25', 'ตรวจสอบระบบไฟฟ้า', 1500, 'ตรวจสอบและซ่อมแซมระบบไฟฟ้าทั้งคัน', 'Chris'),
+(10, '2017-06-15', 'เปลี่ยนกระจกมองหลัง', 800, 'เปลี่ยนกระจกมองหลังใหม่', 'Linda');
+
+INSERT INTO MaintenanceSchedule (vehicle_id, maintenance_type, next_due_date, status)
+VALUES (1, 'เปลี่ยนยาง', '2021-12-01', 'Pending'),
+(2, 'ตรวจเช็คเครื่องยนต์', '2022-01-10', 'Pending'),
+(3, 'เปลี่ยนไฟเบรก', '2021-10-05', 'Pending'),
+(4, 'ตรวจสอบช่วงล่าง', '2021-11-15', 'Pending'),
+(5, 'ล้างถังน้ำมัน', '2022-03-20', 'Pending'),
+(6, 'เปลี่ยนสายพาน', '2021-09-10', 'Pending'),
+(7, 'เปลี่ยนยางเส้นที่ 3', '2021-12-15', 'Pending'),
+(8, 'ตรวจเช็คระบบระบายความร้อน', '2022-02-25', 'Pending'),
+(9, 'ตรวจสอบระบบไฟฟ้า', '2022-01-30', 'Pending'),
+(10, 'เปลี่ยนยางกันฝุ่น', '2021-11-25', 'Pending');
